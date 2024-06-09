@@ -1,4 +1,5 @@
 #!/bin/sh
+apt-get update --fix-missing -y
 apt install -y mysql-server mysql-client libmysqlclient-dev
 service mysql restart
 service mysql status
