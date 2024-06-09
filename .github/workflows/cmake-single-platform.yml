@@ -22,6 +22,8 @@ jobs:
       image: 444047485/kuipercourse_env:v1.0
 
     steps:
+    - name: env
+      run: sh env.sh
     - name: Checkout
       uses: actions/checkout@v3
       with:
