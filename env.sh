@@ -1,5 +1,7 @@
 #!/bin/sh
 apt install -y mysql-server mysql-client libmysqlclient-dev
+service mysql restart
+service mysql status
 wget https://tangentsoft.com/mysqlpp/releases/mysql++-3.2.5.tar.gz
 tar -zxvf ./mysql++-3.2.5.tar.gz
 cd  mysql++-3.2.5
