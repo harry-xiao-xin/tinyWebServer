@@ -22,12 +22,12 @@ jobs:
       image: 444047485/kuipercourse_env:v1.0
 
     steps:
-    - name: env
-      run: sh env.sh
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        ref: master 
+        ref: master
+    - name: env
+      run: sh env.sh
     - name: Compile and Test 
       run: mkdir build && cd build && cmake .. && make -j8 && ../bin/test_tihyWebServer
 
