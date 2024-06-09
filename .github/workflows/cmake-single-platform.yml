@@ -27,7 +27,7 @@ jobs:
       with:
         ref: master
     - name: env
-      run: sh env.sh
+      run: apt-get install wget -y && sh env.sh
     - name: Compile and Test 
       run: mkdir build && cd build && cmake .. && make -j8 && ../bin/test_tihyWebServer
 
