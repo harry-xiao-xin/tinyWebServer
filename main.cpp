@@ -1,14 +1,33 @@
 #include <iostream>
-#include "log/log.h"
+#include "config/config.h"
 
+using namespace std;
 using namespace tiny_web_server;
 
-int main() {
-    Log::get_instance()->init("./test_log", false, 2000, 800000, 0);
-    LOG_INFO("%s:", "test info log");
-    LOG_ERROR("%s:", "test error log");
-    LOG_DEBUG("%s:", "test debug log");
-    LOG_WARN("%s:", "test warn log");
-    std::cout << "Hello, World!" << std::endl;
+int main(int argc, char *argv[]) {
+    //需要修改的数据库信息,登录名,密码,库名
+    string user = "root";
+    string passwd = "123456";
+    string databasename = "test";
+    //命令行解析
+    Config config;
+    config.parse_arg(argc, argv);
+    WebServer server;
+    //初始化
+    server.init(config.PORT, user, passwd, databasename, config.LOGWrite,
+                config.OPT_LINGER, config.TRIGMode, config.sql_num, config.thread_num,
+                config.close_log, config.actor_model);
+    //日志
+    server.log_write();
+    //数据库
+    server.sql_pool();
+    //线程池
+    server.thread_pool();
+    //触发模式
+    server.trig_mode();
+    //监听
+    server.eventListen();
+    //运行
+    server.eventLoop();
     return 0;
 }

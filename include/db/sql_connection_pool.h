@@ -17,8 +17,8 @@
 namespace tiny_web_server {
     class ConnectionPool {
     public:
-        std::shared_ptr<WrapMysql> getConnection();
-        bool releaseConnection(std::shared_ptr<WrapMysql> &connection);
+        WrapMysql *getConnection();
+        bool releaseConnection(WrapMysql *connection);
         int getFreeConnection();
         void destroyConnection();
         static ConnectionPool *getInstance();
@@ -31,7 +31,7 @@ namespace tiny_web_server {
         int m_currentConnections_;
         int m_freeConnections_;
         std::mutex m_mutex_;
-        std::list<std::shared_ptr<WrapMysql>> connect_lists_;
+        std::list<WrapMysql *> connect_lists_;
     public:
         std::string m_url_;                 //主机地址
         std::string m_port_;                //数据库端口号

@@ -20,7 +20,7 @@ namespace tiny_web_server {
         m_maxConnections_ = max_connections;
         m_close_log_ = close_log;
         for (int i = 0; i < max_connections; i++) {
-            std::shared_ptr<WrapMysql> connection = std::make_shared<WrapMysql>(false);
+            WrapMysql *connection = new WrapMysql(false);
             if (!connection->connect(database_name.c_str(), url.c_str(), username.c_str(), password.c_str(), port)) {
                 LOG_ERROR("MySQL connection error.");
             }
@@ -31,8 +31,8 @@ namespace tiny_web_server {
         m_condition_variable_.notify_all();
     }
 
-    std::shared_ptr<WrapMysql> ConnectionPool::getConnection() {
-        std::shared_ptr<WrapMysql> connection;
+    WrapMysql *ConnectionPool::getConnection() {
+        WrapMysql *connection = nullptr;
         std::unique_lock<std::mutex> lock(m_mutex_);
         m_condition_variable_.wait(lock, [&] { return connect_lists_.size() > 0; });
         connection = connect_lists_.front();
@@ -43,7 +43,7 @@ namespace tiny_web_server {
         return connection;
     }
 
-    bool ConnectionPool::releaseConnection(std::shared_ptr<WrapMysql> &connection) {
+    bool ConnectionPool::releaseConnection(WrapMysql *connection) {
         if (connection == nullptr)return false;
         {
             std::lock_guard<std::mutex> lock(m_mutex_);
@@ -64,6 +64,7 @@ namespace tiny_web_server {
         connect_lists_.clear();
         m_freeConnections_ = 0;
         m_currentConnections_ = 0;
+        m_condition_variable_.notify_all();
     }
 
     int ConnectionPool::getFreeConnection() {

@@ -13,7 +13,6 @@ namespace tiny_web_server {
     class WrapMysql : public mysqlpp::Connection {
     public:
         explicit WrapMysql(bool te = true) : mysqlpp::Connection(te) {}
-
         template<typename... Args>
         bool insert_exec(const char *format, Args... args);
         template<typename... Args>
